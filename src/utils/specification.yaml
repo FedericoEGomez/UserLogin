@@ -1,0 +1,184 @@
+paths:
+  /ver:
+    get:
+      tags:
+        - api ver 
+      description: Esta ruta trae el listado de todo los productos
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseListFood'
+  /registrar:
+    post: 
+      tags:
+        - api crear 
+      description: Esta ruta crea un item de comida en la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postFood"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseFood'
+  /login:
+    post: 
+      tags:
+        - api crear 
+      description: Esta ruta crea un item de comida en la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postFood"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseFood'
+  /editar/{id}:
+    put: 
+      tags:
+        - api editar  
+      description: Esta ruta crea un item de comida en la base de datos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/postFood"
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/responseFood'
+        400:
+         description: bad request
+         content:
+           application/json:
+              schema:
+                  $ref: '#/components/schemas/badRequestInvalidId'
+  /eliminar/{id}:
+    delete: 
+      tags:
+        - api eliminar 
+      description: Esta ruta crea un item de comida en la base de datos
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/delereteFoodResponse'
+        400:
+         description: bad request
+         content:
+           application/json:
+              schema:
+                  $ref: '#/components/schemas/badRequestInvalidId'
+components:
+  schemas:
+    postFood:
+      properties:
+        nombre:
+          type: string
+          example: "ejemplo"
+        tipo: 
+          type: string
+          example: "ejemplo"
+        precio:
+          type: number
+          example: 1500
+        descripcion:
+          type: string
+          example: "Esto es un ejemplo de descipcion"
+    responseFood:
+      properties:
+        _id: 
+          type: string
+          example: 641a029a579f12da26c35882
+        nombre: 
+          type: string
+          example: "ejemplo"
+        tipo: 
+          type: string
+          example: "ejemplo"
+        precio:
+          type: number
+          example: 1550
+        descripcion:
+          type: string
+          example: "Esto es un ejemplo de descipcion"
+        __v:
+          type: number
+          example: 0
+    delereteFoodResponse: 
+      properties:
+        msg:
+          type: string
+          example: "objeto borrado ejemplo"
+        food:
+          $ref: '#/components/schemas/responseFood'
+    responseListFood:
+      properties:
+        foods: 
+          items:
+            $ref: '#/components/schemas/responseFood'
+    badRequestInvalidId: 
+      properties:
+        msg:
+          type: string
+          example: "El id es invalido"
+    badRequestInvalidType: 
+      properties:
+        msg:
+          type: string
+          example: "El tipe es invalido"
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Id del item en cuuestion
+      required: true
+      schema:
+        type: string
+    tipo:
+      name: tipo
+      in: path
+      description: Tipo del item en cuuestion
+      required: true
+      schema:
+        type: string
+    tipoQuery:
+      name: tipo
+      in: query
+      description: Tipo del item en cuuestion
+      schema:
+        type: string
+    nombreQuery:
+      name: nombre
+      in: query
+      description: Tipo del item en cuuestion
+      schema:
+        type: string
+    precioQuery:
+      name: precio
+      in: query
+      description: Tipo del item en cuuestion
+      schema:
+        type: string
+
