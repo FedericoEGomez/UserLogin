@@ -12,21 +12,16 @@ class ApiController {
 
     async register (req, res) {
         try {
-            const err = validationResult(req)
-            if (err.isEmpty()) {
-                let salt = bcrypt.genSaltSync(10)
-                let hash = bcrypt.hashSync(req.body.pass, salt)
-                let usuario = {
-                    name: req.body.name,
-                    email: req.body.email,
-                    password: hash
-                }
-                const item = new User(usuario)
-                await item.save()
-                res.status(201).json({item})
-            } else {
-                res.status(501).json(err)
+            let salt = bcrypt.genSaltSync(10)
+            let hash = bcrypt.hashSync(req.body.pass, salt)
+            let usuario = {
+                name: req.body.name,
+                email: req.body.email,
+                password: hash
             }
+            const item = new User(usuario)
+            await item.save()
+            res.status(201).json({item})
         } catch (error) {
             res.status(501).json({error})
         }
@@ -35,7 +30,7 @@ class ApiController {
     async editarUnUsuario (req, res) {
         try {
             await User.findByIdAndUpdate(req.params.id,req.body);
-            console.log("comida editada");
+            console.log("ususario editada");
             res.status(201).json(req.body);
         } catch (error) {
             console.log(error);
@@ -45,30 +40,22 @@ class ApiController {
 
     async eliminarUsuario (req, res) {
         const user = await User.findByIdAndDelete(req.params.id);
-        console.log({msg: "adios comida", user});
-        res.status(200).json({msg: "adios comida", user});
+        console.log({msg: "adios usuario", user});
+        res.status(200).json({msg: "adios usuario", user});
     }
     async loginToken (req, res) {
-
         try {
-            const err = validationResult(req)
-            if (err.isEmpty()) {
-                const usuario = await User.findOne({email: req.body.email})
-    
-                if (usuario == null ) {
-                    res.json({msg: "El mail o la contraseña es incorrecto"})     
-                }
-                if (!bcrypt.compareSync(req.body.password, usuario.password)) {
-                    res.json({msg: "El mail o la contraseña es incorrecto"}) 
-                }
-                const token = await generarToken({id:usuario._id, email:usuario.email})
-                if (req.body.remember) {
-                    res.cookie("tokenDelUsuario", token, {maxAge: 60000*60*24})
-                }
-                res.json({email: req.body.email, token})
-            } else {
-                res.status(501).json(err)
+            const usuario = await User.findOne({email: req.body.email})
+
+            if (usuario == null ) {
+                res.json({msg: "El mail o la contraseña es incorrecto"})     
             }
+            if (!bcrypt.compareSync(req.body.password, usuario.password)) {
+                res.json({msg: "El mail o la contraseña es incorrecto"}) 
+            }
+            const token = await generarToken({id:usuario._id, email:usuario.email})
+        
+            res.json({email: req.body.email, token})
         } catch (error) {
             res.json(error)
         }
