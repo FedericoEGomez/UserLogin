@@ -1,6 +1,7 @@
-const {check} = require('express-validator')
+const {check} = require('express-validator');
 const {User} = require('../models/user');
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
+
 const checksEdit  = [
     check('name')
         .notEmpty().withMessage('El campo name es obligatorio')
@@ -22,7 +23,6 @@ const checksEdit  = [
         .isString().withMessage('El campo oldPassword debe ser de tipo string'),
     check('password')
         .notEmpty().withMessage('El campo password es obligatorio')
-        .isLength({min:8}).withMessage('La contraseña debe tener mas de 8 caractenes')
         .isString().withMessage('El campo password debe ser de tipo string')
         .custom((value, { req }) => {
             return value == req.body.repeatpassword
@@ -31,7 +31,7 @@ const checksEdit  = [
             //RegEx o expresion regular
             const validar = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
             return validar.test(value)
-        }).withMessage('La contraseña debe contar con bla bla')
+        }).withMessage('La contraseña debe contar con al menos 8 caracteres , una mayuscula (A-Z), un numero (0-9) y un caracter ( #?!@$%^&* )')
         .custom((value , {req} )=> {
             return User.findOne({ email: req.body.email }
             ).then(user => {
@@ -44,4 +44,4 @@ const checksEdit  = [
     check('repeatpassword')
         .notEmpty().withMessage('Debes repetir tu contraseña')
 ]
-module.exports = checksEdit
+module.exports = checksEdit;

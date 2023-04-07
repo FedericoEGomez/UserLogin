@@ -1,5 +1,6 @@
-const {check} = require('express-validator')
+const {check} = require('express-validator');
 const {User} = require('../models/user');
+
 const checks  = [
     check('name')
         .notEmpty().withMessage('El campo name es obligatorio')
@@ -18,7 +19,6 @@ const checks  = [
         }),
     check('password')
         .notEmpty().withMessage('El campo password es obligatorio')
-        .isLength({min:8}).withMessage('La contraseña debe tener mas de 8 caractenes')
         .isString().withMessage('El campo password debe ser de tipo string')
         .custom((value, { req }) => {
             return value == req.body.repeatpassword
@@ -27,8 +27,8 @@ const checks  = [
             //RegEx o expresion regular
             const validar = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
             return validar.test(value)
-        }).withMessage('La contraseña debe contar con bla bla'),
+        }).withMessage('La contraseña debe contar con al menos 8 caracteres , una mayuscula (A-Z), un numero (0-9) y un caracter ( #?!@$%^&* )'),
     check('repeatpassword')
         .notEmpty().withMessage('Debes repetir tu contraseña')
 ]
-module.exports = checks
+module.exports = checks;
