@@ -9,15 +9,7 @@ const checksEdit  = [
     check('email')
         .notEmpty().withMessage('El campo email es obligatorio')
         .isString().withMessage('El campo tipo debe ser de email string')
-        .isEmail().withMessage('El string ingresado debe ser un email')
-        .custom(value => {
-            return User.findOne({ email: value }
-            ).then(user => {
-                if (user) {
-                    return Promise.reject('El email ya se encuentra registrado');
-                }
-            })
-        }),
+        .isEmail().withMessage('El string ingresado debe ser un email'),
     check('oldPassword')
         .notEmpty().withMessage('El campo oldPassword es obligatorio')
         .isString().withMessage('El campo oldPassword debe ser de tipo string'),
