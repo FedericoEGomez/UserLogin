@@ -1,9 +1,14 @@
+openapi : 3.0.1
+info: 
+    title: 'FoodCrud JS'
+    description: 'Esto es un ejemplo de como documentar Apis' 
+    version: '1.0.0'
 paths:
   /ver:
     get:
       tags:
         - api ver 
-      description: Esta ruta trae el listado de todo los productos
+      description: Esta ruta muestra el listado de usuarios en la base de datos
       responses:
         200:
           description: OK
@@ -15,12 +20,12 @@ paths:
     post: 
       tags:
         - api crear 
-      description: Esta ruta crea un item de comida en la base de datos
+      description: Esta ruta registra el usuario en la base de datos, posee distitnas validaciones como existencia en cada campo y a su vez la contraseña tiene una validacion con expresion regular para saber si posee 8 caracteres, un mayuscula, minusculas y algun caracter especial
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postFood"
+              $ref: "#/components/schemas/postRegister"
       responses:
         201:
           description: OK
@@ -32,12 +37,12 @@ paths:
     post: 
       tags:
         - api crear 
-      description: Esta ruta crea un item de comida en la base de datos
+      description: Esta ruta devuelve un token con 4h de vida, se debe enviar el email y la contraseña para obtener el JWT
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postFood"
+              $ref: "#/components/schemas/postLogin"
       responses:
         201:
           description: OK
@@ -50,13 +55,15 @@ paths:
       tags:
         - api editar  
       description: Esta ruta crea un item de comida en la base de datos
+      
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/postFood"
+              $ref: "#/components/schemas/postRegister"
       parameters:
         - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/JWTtoken'
       responses:
         201:
           description: OK
@@ -74,9 +81,10 @@ paths:
     delete: 
       tags:
         - api eliminar 
-      description: Esta ruta crea un item de comida en la base de datos
+      description: Esta ruta crea un item de comida en la base de datos 
       parameters:
         - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/JWTtoken'
       responses:
         200:
           description: OK
@@ -92,20 +100,28 @@ paths:
                   $ref: '#/components/schemas/badRequestInvalidId'
 components:
   schemas:
-    postFood:
+    postRegister:
       properties:
-        nombre:
+        name:
           type: string
           example: "ejemplo"
-        tipo: 
+        email: 
           type: string
           example: "ejemplo"
-        precio:
-          type: number
-          example: 1500
-        descripcion:
+        password:
           type: string
-          example: "Esto es un ejemplo de descipcion"
+          example: "ejemplo"
+        repeatpassword:
+          type: string
+          example: "ejemplo"
+    postLogin:
+      properties:
+        email: 
+          type: string
+          example: "ejemplo"
+        password:
+          type: string
+          example: "ejemplo"
     responseFood:
       properties:
         _id: 
@@ -143,11 +159,6 @@ components:
         msg:
           type: string
           example: "El id es invalido"
-    badRequestInvalidType: 
-      properties:
-        msg:
-          type: string
-          example: "El tipe es invalido"
   parameters:
     id:
       name: id
@@ -156,29 +167,13 @@ components:
       required: true
       schema:
         type: string
-    tipo:
-      name: tipo
-      in: path
-      description: Tipo del item en cuuestion
+    JWTtoken:
+      name: JWTtoken
+      in: header
       required: true
       schema:
         type: string
-    tipoQuery:
-      name: tipo
-      in: query
-      description: Tipo del item en cuuestion
-      schema:
-        type: string
-    nombreQuery:
-      name: nombre
-      in: query
-      description: Tipo del item en cuuestion
-      schema:
-        type: string
-    precioQuery:
-      name: precio
-      in: query
-      description: Tipo del item en cuuestion
-      schema:
-        type: string
+    
+   
+    
 
