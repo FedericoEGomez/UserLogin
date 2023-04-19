@@ -53,7 +53,7 @@ class ApiController {
             if (!bcrypt.compareSync(req.body.password, usuario.password)) {
                 res.json({msg: "El mail o la contraseña es incorrecto"}) 
             }
-            const token = await generarToken({id:usuario._id, email:usuario.email})
+            const token = generarToken({id:usuario._id, email:usuario.email})
         
             res.json({email: req.body.email, token})
         } catch (error) {
